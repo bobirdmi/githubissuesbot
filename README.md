@@ -1,5 +1,5 @@
 # MIPYTGitHubBot
-GitHub Issues Bot for MI-PYT in FIT CTU in Prague
+GitHub Issues Bot for MI-PYT in FIT CTU in Prague. The program labels issues in the given repository by the issues itself and their comments.
 
 ### Requirements
 * python 3.5
