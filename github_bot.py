@@ -28,22 +28,29 @@ class GitHubBot:
         for label in self._label_list:
             self._label_rules.append(conf['rules'][label])
 
-    def label_issues(self):
+    def label_issues(self, label_comments):
         r = self._session.get(self.url)
-        issues_num = len(r.json())
-        # print(issues_num)
+        r.raise_for_status()
 
+        issues_num = len(r.json())
         for issue_id in range(issues_num):
             issue_info = r.json()[issue_id]
             if issue_info['labels']:
                 continue
 
-            self._set_labels(issue_info['number'], issue_info['title'], issue_info['body'])
+            self._set_labels(issue_info['number'], issue_info['title'], issue_info['body'], label_comments)
 
-    def _set_labels(self, issue_num, title, body):
+    def _set_labels(self, issue_num, title, body, label_comments):
+        issue_url = self.url + '/' + str(issue_num)
         text = title + " " + body
-        labels = []
 
+        if label_comments:
+            # add comments' body to issue's text
+            r = self._session.get(issue_url + '/comments')
+            for comm in r.json():
+                text += ' ' + comm['body']
+
+        labels = []
         index = 0
         for rule in self._label_rules:
             if re.search(rule, text):
@@ -54,14 +61,14 @@ class GitHubBot:
         print(10 * '-')
         print('Issue number:', issue_num)
         print('Issue title:', title)
-        print('Issue url:', self.url + '/' + str(issue_num))
+        print('Issue url:', issue_url)
 
         if not labels:
             labels.append(self.default_label)
 
         print("Labeled as:", labels)
 
-        r = self._session.post(self.url + '/' + str(issue_num) + '/labels', data=json.dumps(labels))
+        r = self._session.post(issue_url + '/labels', data=json.dumps(labels))
         print('Status code:', r.status_code)
 
 if __name__ == '__main__':
@@ -72,14 +79,18 @@ if __name__ == '__main__':
 
     session = requests.Session()
     session.headers = {'Authorization': 'token ' + token, 'User-Agent': 'Python'}
+
     # r = session.get('https://api.github.com/repos/bobirdmi/MIPYTGitHubBot/issues/3/labels')
-    r = session.get('https://api.github.com/repos/bobirdmi/MIPYTGitHubBot/issues')
     # r = session.get('https://api.github.com/repos/bobirdmi/MIPYTGitHubBot/labels')
+    # r = session.get('https://api.github.com/repos/bobirdmi/MIPYTGitHubBot/issues')
+    r = session.get('https://api.github.com/repos/bobirdmi/MIPYTGitHubBot/issues/11/comments')
     print(r.status_code)
     print(len(r.json()))
+    print(r.json())
     print(r.json()[1])
     print(r.json()[1]['url'])
-    print(r.json()[1]['labels_url'])
+    # print(r.json()[1]['labels_url'])
+    # print(r.json()[1]['comments_url'])
     # print(r.json()['title'])
     # print(r.json()['body'])
 
