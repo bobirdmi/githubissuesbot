@@ -5,8 +5,12 @@ import re
 
 
 class GitHubBot:
-    def __init__(self, auth_file, label_file):
+    def __init__(self, auth_file, label_file, url, period, default_label):
         self._read_config(auth_file, label_file)
+
+        self.url = url
+        self.period = period
+        self.default_label = default_label
 
         self._session = requests.Session()
         self._session.headers = {'Authorization': 'token ' + self._token, 'User-Agent': 'Python'}
@@ -18,26 +22,25 @@ class GitHubBot:
         self._token = conf['github']['token']
 
         self._label_list = list(map(str.strip, conf['list']['labels'].split(',')))
-        print("List of labels: ", self._label_list)
+        print("List of defined labels:", self._label_list)
 
         self._label_rules = []
         for label in self._label_list:
             self._label_rules.append(conf['rules'][label])
 
     def label_issues(self):
-        url = 'https://api.github.com/repos/bobirdmi/MIPYTGitHubBot/issues'
-        r = self._session.get(url)
+        r = self._session.get(self.url)
         issues_num = len(r.json())
-        print(issues_num)
+        # print(issues_num)
 
         for issue_id in range(issues_num):
             issue_info = r.json()[issue_id]
             if issue_info['labels']:
                 continue
 
-            self._set_labels(url, issue_info['number'], issue_info['title'], issue_info['body'])
+            self._set_labels(issue_info['number'], issue_info['title'], issue_info['body'])
 
-    def _set_labels(self, url, issue_num, title, body):
+    def _set_labels(self, issue_num, title, body):
         text = title + " " + body
         labels = []
 
@@ -48,12 +51,21 @@ class GitHubBot:
 
             index += 1
 
-        print("Found labels: ", labels)
+        print(10 * '-')
+        print('Issue number:', issue_num)
+        print('Issue title:', title)
+        print('Issue url:', self.url + '/' + str(issue_num))
 
-        r = self._session.post(url + '/' + str(issue_num) + '/labels', data=json.dumps(labels))
-        print('Status code: ', r.status_code)
+        if not labels:
+            labels.append(self.default_label)
+
+        print("Labeled as:", labels)
+
+        r = self._session.post(self.url + '/' + str(issue_num) + '/labels', data=json.dumps(labels))
+        print('Status code:', r.status_code)
 
 if __name__ == '__main__':
+    # the following code is only for testing purposes (as functionality and new ideas)
     config = configparser.ConfigParser()
     config.read('./config/auth.cfg')
     token = config['github']['token']
