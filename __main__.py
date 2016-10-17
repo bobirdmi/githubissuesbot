@@ -4,7 +4,18 @@ import sched
 import time
 
 
-@click.command()
+@click.group()
+def cli():
+    pass
+
+
+@cli.command()
+def web():
+    """Run the web app"""
+    click.echo('Running the web app')
+
+
+@cli.command()
 @click.argument('auth_file', type=click.Path(exists=True))
 @click.argument('label_file', type=click.Path(exists=True))
 @click.option('-u', '--user', prompt='Username', help='Username of repository owner.')
@@ -16,7 +27,7 @@ import time
               help='Default label for those issues that do not satisfy any rules in the label_file. '
                    'By default is "default".')
 @click.option('-c', '--comments', is_flag=True, help='Set this option if the program must use comments for labeling.')
-def process_args(auth_file, label_file, user, repo, period, deflabel, comments):
+def console(auth_file, label_file, user, repo, period, deflabel, comments):
     """Run the console app"""
     click.echo('Running the console app')
     print(10 * '=')
@@ -39,4 +50,4 @@ def process_args(auth_file, label_file, user, repo, period, deflabel, comments):
     my_scheduler.run()
 
 
-process_args()
+cli()
