@@ -4,31 +4,35 @@ from flask import request
 import configparser
 import hashlib
 import hmac
-import os
 import github_bot
+import markdown
+
 
 web_config_file = '/home/bobirdmi/MIPYTBotTMP/config/web.cfg'
 app = Flask(__name__)
 
+# read web configurations
+conf = configparser.ConfigParser()
+conf.read(web_config_file)
+secret_file = conf['github']['secret_file']
+auth_file = conf['github']['auth_file']
+label_file = conf['github']['label_file']
+readme_file = conf['github']['readme_file']
+
+conf.read(secret_file)
+
 
 @app.route('/')
-def index(some_name='fsdfdsf'):
-    return render_template('index.html', name=some_name)
+def index():
+    with open(readme_file, 'r') as file:
+        readme_text = file.read()
+
+    return render_template('index.html', readme_text=readme_text)
 
 
 @app.route('/hook', methods=['POST'])
 def hook():
-    conf = configparser.ConfigParser()
-    conf.read(web_config_file)
-
-    secret_file = conf['github']['secret_file']
-    auth_file = conf['github']['auth_file']
-    label_file = conf['github']['label_file']
-
-    conf.read(secret_file)
-
     verify_signature(conf['github']['secret_token'],
-                    #os.environ['SECRET_TOKEN'],
                      request.headers['X-Hub-Signature'],
                      request.data)
 
@@ -37,6 +41,12 @@ def hook():
 
     return str(request.get_json()['issue']['url']) + ', ' +  str(request.get_json()['issue']['title']) + ', ' \
            + str(request.get_json()['issue']['body']) + ', ' + str(request.get_json()['issue']['labels'])
+
+
+@app.template_filter('markdown')
+def convert_markdown(text):
+    """Convert markdown text to html"""
+    return markdown.markdown(text)
 
 
 def verify_signature(secret: str, signature: str, resp_body) -> None:
