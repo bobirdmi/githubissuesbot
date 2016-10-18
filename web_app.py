@@ -7,10 +7,7 @@ import hmac
 import os
 import github_bot
 
-config_path = '/home/bobirdmi/MIPYTBotTMP/config/'
-secret_file = config_path + 'secret.cfg'
-auth_file = config_path + 'auth.cfg'
-label_file = config_path + 'label.cfg'
+web_config_file = '/home/bobirdmi/MIPYTBotTMP/config/web.cfg'
 app = Flask(__name__)
 
 
@@ -22,7 +19,14 @@ def index(some_name='fsdfdsf'):
 @app.route('/hook', methods=['POST'])
 def hook():
     conf = configparser.ConfigParser()
+    conf.read(web_config_file)
+
+    secret_file = conf['github']['secret_file']
+    auth_file = conf['github']['auth_file']
+    label_file = conf['github']['label_file']
+
     conf.read(secret_file)
+
     verify_signature(conf['github']['secret_token'],
                     #os.environ['SECRET_TOKEN'],
                      request.headers['X-Hub-Signature'],
