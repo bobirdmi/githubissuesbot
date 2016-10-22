@@ -22,7 +22,7 @@ setup(
     install_requires=['Flask', 'markdown>=2', 'click>=6', 'requests>=2', 'pypandoc>=1'],
     entry_points={
             'console_scripts': [
-                'githubbot = githubissuesbot.__main__:cli',
+                'githubbot = githubissuesbot.command_line:main',
             ],
     },
     classifiers=[
