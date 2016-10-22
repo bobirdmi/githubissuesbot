@@ -4,7 +4,7 @@ from flask import request
 import configparser
 import hashlib
 import hmac
-import github_bot
+from . import github_bot
 import markdown
 
 
@@ -14,12 +14,12 @@ app = Flask(__name__)
 # read web configurations
 conf = configparser.ConfigParser()
 conf.read(web_config_file)
-secret_file = conf['github']['secret_file']
-auth_file = conf['github']['auth_file']
-label_file = conf['github']['label_file']
-readme_file = conf['github']['readme_file']
-
-conf.read(secret_file)
+# secret_file = conf['github']['secret_file']
+# auth_file = conf['github']['auth_file']
+# label_file = conf['github']['label_file']
+# readme_file = conf['github']['readme_file']
+#
+# conf.read(secret_file)
 
 
 @app.route('/')

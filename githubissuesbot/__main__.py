@@ -1,6 +1,8 @@
 import click
-import github_bot
-import web_app
+# from .github_bot import GitHubBot
+# from .web_app import run_local_web
+from . import github_bot
+from . import web_app
 import sched
 import time
 
@@ -15,6 +17,7 @@ def web():
     """Run the web app"""
     # click.echo('Running the web app')
     web_app.run_local_web()
+    # run_local_web()
 
 
 @cli.command()
@@ -38,6 +41,9 @@ def console(auth_file, label_file, user, repo, period, deflabel, comments):
     bot = github_bot.GitHubBot(click.format_filename(auth_file),
                                click.format_filename(label_file),
                                url, deflabel)
+    # bot = GitHubBot(click.format_filename(auth_file),
+    #                            click.format_filename(label_file),
+    #                            url, deflabel)
 
     my_scheduler = sched.scheduler(time.time, time.sleep)
 
@@ -51,5 +57,4 @@ def console(auth_file, label_file, user, repo, period, deflabel, comments):
     my_scheduler.enter(0, 1, repeated_labeling, (my_scheduler,))
     my_scheduler.run()
 
-
-cli()
+cli(prog_name='githubissuesbot')
