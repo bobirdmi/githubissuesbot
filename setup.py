@@ -13,7 +13,7 @@ try:
     with open('README.rst', 'r') as file:
         long_description = file.read()
 except (ImportError,RuntimeError) as e:
-    print('Error: ' + str(e) + ' Could not convert Markdown to RST.')
+    print('Warning: ' + str(e) + ': could not convert Markdown to RST.')
 
     with open('README.txt', 'w') as file_out:
         with open('README.md', 'r') as file_in:
@@ -32,7 +32,7 @@ setup(
     license='Public Domain',
     packages=find_packages(),
     setup_requires=['pypandoc>=1'],
-    install_requires=['Flask', 'markdown>=2', 'click>=6', 'requests>=2'],
+    install_requires=['Flask', 'markdown>=2', 'click>=6', 'requests>=2', 'appdirs>=1'],
     entry_points={
             'console_scripts': [
                 'githubbot = githubissuesbot.command_line:main',

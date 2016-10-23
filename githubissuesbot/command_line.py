@@ -11,9 +11,10 @@ def cli():
 
 
 @cli.command()
-def web():
+@click.option('-c', '--config', help='Path to file with web configuration.')
+def web(config):
     """Run the web app"""
-    web_app.run_local_web()
+    web_app.run_local_web(config)
 
 
 @cli.command()

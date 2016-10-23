@@ -6,10 +6,14 @@ import hashlib
 import hmac
 from . import github_bot
 import markdown
+import appdirs
 
+app_name = __name__.split('.')[0]
+print(app_name)
+app = Flask(app_name)
 
-web_config_file = '/home/bobirdmi/MIPYTBotTMP/config/web.cfg'
-app = Flask(__name__)
+web_config_file = appdirs.site_config_dir(appname=app_name) + '/web.cfg'
+print(web_config_file)
 
 # read web configurations
 conf = configparser.ConfigParser()
@@ -71,6 +75,11 @@ def verify_signature(secret: str, signature: str, resp_body) -> None:
         raise 'Error: digests do not match'
 
 
-def run_local_web():
+def run_local_web(web_config):
+    global web_config_file
+
+    if web_config:
+        web_config_file = web_config
+
     app.config['TEMPLATES_AUTO_RELOAD'] = True
     app.run(debug=True)
