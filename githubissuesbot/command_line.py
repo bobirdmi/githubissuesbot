@@ -1,8 +1,6 @@
 import click
 from . import github_bot
 from . import web_app
-# from githubissuesbot import github_bot
-# from githubissuesbot import web_app
 import sched
 import time
 
@@ -15,7 +13,6 @@ def cli():
 @cli.command()
 def web():
     """Run the web app"""
-    # click.echo('Running the web app')
     web_app.run_local_web()
 
 

@@ -1,13 +1,25 @@
 from setuptools import setup, find_packages
-import pypandoc
 
 
-pypandoc.convert_file('README.md', 'rst', outputfile='README.rst')
+long_description = ''
 
-with open('README.rst') as f:
-    long_description = ''.join(f.readlines())
- 
- 
+try:
+    import pypandoc
+    from pypandoc.pandoc_download import download_pandoc
+
+    download_pandoc()
+
+    pypandoc.convert_file('README.md', 'rst', outputfile='README.rst')
+    with open('README.rst', 'r') as file:
+        long_description = file.read()
+except (ImportError,RuntimeError) as e:
+    print('Error: ' + str(e) + ' Could not convert Markdown to RST.')
+
+    with open('README.txt', 'w') as file_out:
+        with open('README.md', 'r') as file_in:
+            long_description = file_in.read()
+            file_out.write(long_description)
+
 setup(
     name='githubissuesbot',
     version='0.3',
@@ -19,7 +31,8 @@ setup(
     keywords='github,bot,issues',
     license='Public Domain',
     packages=find_packages(),
-    install_requires=['Flask', 'markdown>=2', 'click>=6', 'requests>=2', 'pypandoc>=1'],
+    setup_requires=['pypandoc>=1'],
+    install_requires=['Flask', 'markdown>=2', 'click>=6', 'requests>=2'],
     entry_points={
             'console_scripts': [
                 'githubbot = githubissuesbot.command_line:main',
