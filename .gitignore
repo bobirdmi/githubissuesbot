@@ -26,6 +26,9 @@ var/
 
 # Config file
 githubissuesbot/config/auth.cfg
+githubissuesbot/config/web.cfg
+
+tmpconfig/
 
 # Log files
 **/.log

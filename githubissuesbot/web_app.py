@@ -7,23 +7,38 @@ import hmac
 from . import github_bot
 import markdown
 import appdirs
+from socket import gethostname
+
+
+def _read_web_config():
+    global conf
+    conf.read(web_config_file)
+
+    global secret_file
+    secret_file = conf['github']['secret_file']
+
+    global auth_file
+    auth_file = conf['github']['auth_file']
+
+    global label_file
+    label_file = conf['github']['label_file']
+
+    global readme_file
+    readme_file = conf['github']['readme_file']
+
+    # read file with a secret token for webhook
+    conf.read(secret_file)
+
 
 app_name = __name__.split('.')[0]
-print(app_name)
 app = Flask(app_name)
-
-web_config_file = appdirs.site_config_dir(appname=app_name) + '/web.cfg'
-print(web_config_file)
-
-# read web configurations
 conf = configparser.ConfigParser()
-conf.read(web_config_file)
-# secret_file = conf['github']['secret_file']
-# auth_file = conf['github']['auth_file']
-# label_file = conf['github']['label_file']
-# readme_file = conf['github']['readme_file']
-#
-# conf.read(secret_file)
+
+# if it is running on pythonanywhere (maybe that code works for others hosts)
+if 'liveweb' in gethostname():
+    # set "web_config_file" variable to file with web configuration
+    # read web configurations
+    _read_web_config()
 
 
 @app.route('/')
@@ -77,9 +92,13 @@ def verify_signature(secret: str, signature: str, resp_body) -> None:
 
 def run_local_web(web_config):
     global web_config_file
-
     if web_config:
         web_config_file = web_config
+    else:
+        web_config_file = appdirs.site_config_dir(appname=app_name) + '/web.cfg'
+
+    # read web configuration
+    _read_web_config()
 
     app.config['TEMPLATES_AUTO_RELOAD'] = True
     app.run(debug=True)

@@ -3,6 +3,7 @@ from . import github_bot
 from . import web_app
 import sched
 import time
+import appdirs
 
 
 @click.group()
@@ -11,7 +12,9 @@ def cli():
 
 
 @cli.command()
-@click.option('-c', '--config', help='Path to file with web configuration.')
+@click.option('-c', '--config',
+              help='Set path to a file with web configuration. '
+                   'Default path: ' + appdirs.site_config_dir(appname=__name__.split('.')[0]) + '/web.cfg')
 def web(config):
     """Run the web app"""
     web_app.run_local_web(config)
