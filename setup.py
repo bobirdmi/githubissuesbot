@@ -38,6 +38,12 @@ setup(
                 'githubbot = githubissuesbot.command_line:main',
             ],
     },
+    package_data={
+            'githubissuesbot': [
+                'config/*',
+                'templates/*.html'
+            ]
+    },
     classifiers=[
         'Environment :: Console',
         'Environment :: Web Environment',

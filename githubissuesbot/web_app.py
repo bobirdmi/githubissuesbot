@@ -34,7 +34,7 @@ app_name = __name__.split('.')[0]
 app = Flask(app_name)
 conf = configparser.ConfigParser()
 
-# if it is running on pythonanywhere (maybe that code works for others hosts)
+# if it is running on pythonanywhere.com (maybe that code works for other hosts)
 if 'liveweb' in gethostname():
     # set "web_config_file" variable to file with web configuration
     # format: /home/<username>/<project_name>/path/to/webcfg.cfg
