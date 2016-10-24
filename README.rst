@@ -41,7 +41,7 @@ directory.
 
 If you want to deploy this app on some host (tested on
 `pythonanywhere <https://www.pythonanywhere.com/>`__), don't forget to
-manually fix **web\_config\_file** value in **web\_app.py** on line 41.
+manually fix **web_config_file** value in **web_app.py** on line 39.
 
 Link to `testpypi <https://testpypi.python.org/pypi/githubissuesbot>`__
 

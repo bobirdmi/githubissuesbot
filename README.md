@@ -8,7 +8,7 @@ GitHub Issues Bot for MI-PYT in FIT CTU in Prague. The program has two modes: co
 ### Manual
 First, create **auth.cfg** (with GitHub personal access token), **label.cfg** (with available labels and the appropriate rules as regular expressions), **secret.cfg** (with [webhook secret token](https://developer.github.com/webhooks/securing/)) and **web.cfg** (web app uses it for reading info about other configuration files) files with the same structure as in **./githubissuesbot/config** directory.
 
-If you want to deploy this app on some host (tested on [pythonanywhere](https://www.pythonanywhere.com/)), don't forget to manually fix **web_config_file** value in **web_app.py** on line 41.
+If you want to deploy this app on some host (tested on [pythonanywhere](https://www.pythonanywhere.com/)), don't forget to manually fix **web_config_file** value in **web_app.py** on line 39.
 
 Link to [testpypi](https://testpypi.python.org/pypi/githubissuesbot)
 
