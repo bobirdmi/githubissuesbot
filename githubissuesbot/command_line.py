@@ -8,7 +8,7 @@ import pkg_resources
 import os
 
 
-app_name=__name__.split('.')[0]
+app_name = __name__.split('.')[0]
 
 
 @click.group()
@@ -17,7 +17,7 @@ def cli():
 
 
 @cli.command()
-@click.option('-d', '--directory',
+@click.option('-d', '--directory', default='./',
               help='Set directory the web config files will be created in. '
                    'Default directory: ./')
 def genconf(directory):
@@ -81,4 +81,4 @@ def create_web_config(new_dir, filename):
 
 
 def main():
-    cli(prog_name='githubissuesbot')
+    cli(prog_name=app_name)

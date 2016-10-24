@@ -7,7 +7,12 @@ try:
     import pypandoc
     from pypandoc.pandoc_download import download_pandoc
 
-    download_pandoc()
+    try:
+        pypandoc.get_pandoc_version()
+    except OSError as e:
+        print('Warning: ' + str(e))
+        print('Downloading pandoc...')
+        download_pandoc()
 
     pypandoc.convert_file('README.md', 'rst', outputfile='README.rst')
     with open('README.rst', 'r') as file:
