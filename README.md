@@ -10,6 +10,6 @@ First, create **auth.cfg** (with GitHub personal access token), **label.cfg** (w
 
 If you want to deploy this app on some host (tested on [pythonanywhere](https://www.pythonanywhere.com/)), don't forget to manually fix **web_config_file** value in **web_app.py** on line 41.
 
-Link to [TODO:testpypi]()
+Link to [testpypi](https://testpypi.python.org/pypi/githubissuesbot)
 
 Type --help for command line manual.

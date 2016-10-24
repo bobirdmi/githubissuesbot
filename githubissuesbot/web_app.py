@@ -4,10 +4,10 @@ from flask import request
 import configparser
 import hashlib
 import hmac
-from . import github_bot
 import markdown
 import appdirs
 from socket import gethostname
+import pkg_resources
 
 
 def _read_web_config():
@@ -23,9 +23,6 @@ def _read_web_config():
     global label_file
     label_file = conf['github']['label_file']
 
-    global readme_file
-    readme_file = conf['github']['readme_file']
-
     # read file with a secret token for webhook
     conf.read(secret_file)
 
@@ -36,19 +33,21 @@ conf = configparser.ConfigParser()
 
 # if it is running on pythonanywhere.com (maybe that code works for other hosts)
 if 'liveweb' in gethostname():
+    import github_bot
     # set "web_config_file" variable to file with web configuration
     # format: /home/<username>/<project_name>/path/to/webcfg.cfg
-    web_config_file = '/home/bobirdmi/MIPYTBotTMP/config/web.cfg'
+    web_config_file = '/home/bobirdmi/MIPYTBotTMP/githubissuesbot/config/web.cfg'
     # read web configurations
     _read_web_config()
+else:
+    from . import github_bot
 
 
 @app.route('/')
 def index():
-    with open(readme_file, 'r') as file:
-        readme_text = file.read()
+    readme_text = pkg_resources.resource_stream(app_name, 'README.md')
 
-    return render_template('index.html', readme_text=readme_text)
+    return render_template('index.html', readme_text=readme_text.read().decode("utf-8"))
 
 
 @app.route('/hook', methods=['POST'])
@@ -57,13 +56,14 @@ def hook():
                      request.headers['X-Hub-Signature'],
                      request.data)
 
-    if request.get_json()['action'] == 'opened':
+    req_json = request.get_json()
+    if req_json['action'] == 'opened':
         bot = github_bot.GitHubBot(auth_file, label_file, None, 'default')
-        bot.label_issue(request.get_json()['issue'])
+        bot.label_issue(req_json['issue'])
 
-    return str(request.get_json()['issue']['url']) + ', ' +  str(request.get_json()['issue']['title']) + ', ' \
-           + str(request.get_json()['issue']['body']) + ', ' + str(request.get_json()['issue']['labels']) + ', ' \
-           + str(request.get_json()['action'])
+    return str(req_json['issue']['url']) + ', ' + str(req_json['issue']['title']) + ', ' \
+           + str(req_json['issue']['body']) + ', ' + str(req_json['issue']['labels']) + ', ' \
+           + str(req_json['action'])
 
 
 @app.template_filter('markdown')

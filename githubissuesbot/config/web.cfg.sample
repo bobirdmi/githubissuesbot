@@ -3,4 +3,3 @@
 secret_file = /home/<username>/<project_name>/config/secret.cfg
 auth_file = /home/<username>/<project_name>/config/auth.cfg
 label_file = /home/<username>/<project_name>/config/label.cfg
-readme_file = /home/<username>/<project_name>/README.md
