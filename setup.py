@@ -10,7 +10,7 @@ with open('README.rst', 'r') as file:
 
 setup(
     name='githubissuesbot',
-    version='0.3.1',
+    version='0.3.2',
     description='GitHub issues bot as console and web app.',
     long_description=long_description,
     author='Dmitriy Bobir',
@@ -19,7 +19,6 @@ setup(
     keywords='github,bot,issues',
     license='Public Domain',
     packages=find_packages(),
-    setup_requires=['pypandoc>=1'],
     install_requires=['Flask', 'markdown>=2', 'click>=6', 'requests>=2', 'appdirs>=1'],
     entry_points={
             'console_scripts': [

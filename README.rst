@@ -15,29 +15,26 @@ Requirements
 -  python 3.5
 -  libraries: `click <http://click.pocoo.org/6/>`__,
    `requests <http://docs.python-requests.org/en/master/>`__,
-   `json <http://docs.python.org/3.5/library/json.html>`__,
-   `configparser <http://docs.python.org/3.5/library/configparser.html>`__,
-   `re <http://docs.python.org/3.5/library/re.html>`__,
-   `sched <http://docs.python.org/3.5/library/sched.html>`__,
-   `time <http://docs.python.org/3.5/library/time.html>`__,
+   `markdown <https://pypi.python.org/pypi/Markdown>`__,
    `flask <http://flask.pocoo.org/>`__,
-   `hashlib <https://docs.python.org/3/library/hashlib.html>`__,
-   `hmac <https://docs.python.org/3/library/hmac.html>`__,
-   `logging <https://docs.python.org/3/library/logging.html>`__,
-   `pandoc <http://pandoc.org/>`__,
-   `pypandoc <https://pypi.python.org/pypi/pypandoc>`__,
    `appdirs <https://pypi.python.org/pypi/appdirs>`__
 
 Manual
 ~~~~~~
 
-First, create **auth.cfg** (with GitHub personal access token),
-**label.cfg** (with available labels and the appropriate rules as
-regular expressions), **secret.cfg** (with `webhook secret
-token <https://developer.github.com/webhooks/securing/>`__) and
-**web.cfg** (web app uses it for reading info about other configuration
-files) files with the same structure as in **./githubissuesbot/config**
-directory.
+Install package by typing the command:
+**python -m pip install --extra-index-url https://testpypi.python.org/pypi githubissuesbot**
+
+Then you may run the app by typing **python -m githubissuesbot**
+or just **githubissuesbot**. Type **--help** for command line manual.
+
+Read how to generate configuration files by typing **python -m githubissuesbot genconf --help**
+or **githubissuesbot genconf --help**.
+
+The app requires the following configuration files: **auth.cfg** (with GitHub personal access token),
+**label.cfg** (with available labels and the appropriate rules as regular expressions),
+**secret.cfg** (with `webhook secret token <https://developer.github.com/webhooks/securing/>`__)
+and **web.cfg** (web app uses it for reading info about other configuration files).
 
 If you want to deploy this app on some host (tested on
 `pythonanywhere <https://www.pythonanywhere.com/>`__), don't forget to
