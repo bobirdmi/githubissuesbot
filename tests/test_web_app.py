@@ -13,3 +13,4 @@ def test_main_page(testapp):
     with open('README.md', 'r') as f:
         assert markdown.markdown(f.read()) in testapp.get('/').data.decode('utf-8')
 
+
