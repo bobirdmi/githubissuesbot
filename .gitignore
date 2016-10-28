@@ -27,6 +27,7 @@ var/
 # Config file
 githubissuesbot/config/auth.cfg
 githubissuesbot/config/web.cfg
+githubissuesbot/config/secret.cfg
 
 tmpconfig/
 
