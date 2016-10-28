@@ -29,9 +29,10 @@ githubissuesbot/config/auth.cfg
 githubissuesbot/config/web.cfg
 githubissuesbot/config/secret.cfg
 
+githubissuesbot/README.md
 
 # Log files
 **/.log
 
-# README for PyPi
-README.txt
+# tests
+tests/fixtures/auth.cfg.truetoken.test
