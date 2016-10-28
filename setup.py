@@ -18,8 +18,10 @@ setup(
     url='https://github.com/bobirdmi',
     keywords='github,bot,issues',
     license='Public Domain',
-    packages=find_packages(),
+    packages=find_packages(exclude=['tests*']),
+    setup_requires=['pytest-runner'],
     install_requires=['Flask', 'markdown>=2', 'click>=6', 'requests>=2', 'appdirs>=1'],
+    tests_require=['pytest', 'betamax'],
     entry_points={
             'console_scripts': [
                 'githubissuesbot = githubissuesbot.command_line:main',
