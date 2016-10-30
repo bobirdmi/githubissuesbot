@@ -52,19 +52,24 @@ class GitHubBot:
         r = self._session.get(self.url)
         r.raise_for_status()
 
+        results = {}
+
         for issue_info in r.json():
             if issue_info['labels']:
                 continue
 
-            self._set_labels(self.url + '/' + str(issue_info['number']),
-                             issue_info['title'],
-                             issue_info['body'], label_comments)
+            results[issue_info['number']] = self._set_labels(self.url + '/' + str(issue_info['number']),
+                                                             issue_info['title'],
+                                                             issue_info['body'],
+                                                             label_comments)
+
+        return results
 
     def label_issue(self, issue_info):
         if not issue_info['labels']:
-            self._set_labels(issue_info['url'],
-                             issue_info['title'],
-                             issue_info['body'], False)
+            return self._set_labels(issue_info['url'],
+                                    issue_info['title'],
+                                    issue_info['body'], False)
 
     def _set_labels(self, issue_url, title, body, label_comments):
         text = title + " " + body
@@ -92,3 +97,5 @@ class GitHubBot:
 
         r = self._session.post(issue_url + '/labels', data=json.dumps(labels))
         logging.debug('Status code:', r.status_code)
+
+        return [labels, r.status_code]

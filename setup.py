@@ -10,7 +10,7 @@ with open('README.rst', 'r') as file:
 
 setup(
     name='githubissuesbot',
-    version='0.3.2',
+    version='0.4',
     description='GitHub issues bot as console and web app.',
     long_description=long_description,
     author='Dmitriy Bobir',

@@ -2,10 +2,10 @@
 labels = bug, duplicate, enhancement, help wanted, invalid, question, wontfix
 
 [rules]
-bug = problem
+bug = bug|problem
 duplicate = same
 enhancement = enhance
-help wanted = advise
+help wanted = help|advise
 invalid = invalid
 question = ask
 wontfix = fix
