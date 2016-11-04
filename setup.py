@@ -1,10 +1,8 @@
 from setuptools import setup, find_packages
-import sys
 
-if sys.argv[-1] == 'sdist':
-    with open('githubissuesbot/README.md', 'w') as file_out:
-        with open('README.md', 'r') as file_in:
-            file_out.write(file_in.read())
+with open('githubissuesbot/README.md', 'w') as file_out:
+    with open('README.md', 'r') as file_in:
+        file_out.write(file_in.read())
 
 with open('README.rst', 'r') as file:
     long_description = file.read()
