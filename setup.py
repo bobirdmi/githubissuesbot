@@ -1,16 +1,17 @@
 from setuptools import setup, find_packages
+import sys
 
-
-with open('githubissuesbot/README.md', 'w') as file_out:
-    with open('README.md', 'r') as file_in:
-        file_out.write(file_in.read())
+if sys.argv[-1] == 'sdist':
+    with open('githubissuesbot/README.md', 'w') as file_out:
+        with open('README.md', 'r') as file_in:
+            file_out.write(file_in.read())
 
 with open('README.rst', 'r') as file:
     long_description = file.read()
 
 setup(
     name='githubissuesbot',
-    version='0.4',
+    version='0.5',
     description='GitHub issues bot as console and web app.',
     long_description=long_description,
     author='Dmitriy Bobir',

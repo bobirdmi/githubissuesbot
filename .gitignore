@@ -36,3 +36,6 @@ githubissuesbot/README.md
 
 # tests
 tests/fixtures/auth.cfg.truetoken.test
+
+# Documentation
+docs/_build

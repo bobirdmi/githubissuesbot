@@ -1,5 +1,9 @@
-# MIPYTGitHubBot
+# githubissuesbot
 GitHub Issues Bot for MI-PYT in FIT CTU in Prague. The program has two modes: console and web app. In *console* mode it labels issues (checks new one with the specified frequency) in the given repository by the issues itself and their comments, and in *web* mode the program labels new opened issue as soon as possible (by [webhook](https://developer.github.com/webhooks/) notification and so one by one). 
+
+Link to [testpypi](https://testpypi.python.org/pypi/githubissuesbot).
+
+Link to [Read The Docs](https://readthedocs.org/projects/githubissuesbot/).
 
 ### Requirements
 * python 3.5
@@ -15,8 +19,6 @@ Read how to generate configuration files by typing **python -m githubissuesbot g
 The app requires the following configuration files: **auth.cfg** (with GitHub personal access token), **label.cfg** (with available labels and the appropriate rules as regular expressions), **secret.cfg** (with [webhook secret token](https://developer.github.com/webhooks/securing/)) and **web.cfg** (web app uses it for reading info about other configuration files).
 
 If you want to deploy this app on some host (tested on [pythonanywhere](https://www.pythonanywhere.com/)), don't forget to manually fix **web_config_file** value in **web_app.py** on line 39.
-
-Link to [testpypi](https://testpypi.python.org/pypi/githubissuesbot).
 
 ### Running tests
 You may run tests by typing **python setup.py test**.

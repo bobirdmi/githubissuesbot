@@ -1,4 +1,4 @@
-MIPYTGitHubBot
+githubissuesbot
 ==============
 
 GitHub Issues Bot for MI-PYT in FIT CTU in Prague. The program has two
@@ -8,6 +8,10 @@ issues itself and their comments, and in *web* mode the program labels
 new opened issue as soon as possible (by
 `webhook <https://developer.github.com/webhooks/>`__ notification and so
 one by one).
+
+Link to `testpypi <https://testpypi.python.org/pypi/githubissuesbot>`__.
+
+Link to `Read The Docs <https://readthedocs.org/projects/githubissuesbot/>`__.
 
 Requirements
 ~~~~~~~~~~~~
@@ -39,8 +43,6 @@ and **web.cfg** (web app uses it for reading info about other configuration file
 If you want to deploy this app on some host (tested on
 `pythonanywhere <https://www.pythonanywhere.com/>`__), don't forget to
 manually fix **web_config_file** value in **web_app.py** on line 39.
-
-Link to `testpypi <https://testpypi.python.org/pypi/githubissuesbot>`__
 
 Type --help for command line manual.
 

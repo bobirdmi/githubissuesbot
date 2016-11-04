@@ -9,19 +9,30 @@ logging.basicConfig(filename='github_bot.log', level=logging.INFO, format='%(asc
 
 
 class GitHubBot:
+    """
+    The class realizes GitHub bot functionality such as labeling all issues at once or processing them
+    by one.
+
+    Attributes:
+        url (str): Url of issues in the specified repo (ex.: `https://api.github.com/repos/<username>/<repo>/issues`)).
+        default_label (str): If no rule may be applied to issue, an issue will be labeled by this string
+    """
     def __init__(self, auth_file, label_file, url, default_label, session=None, auth_token=None):
         """
         A constructor.
 
-        :param auth_file: path to file with authorization info. If you don't want to read file, you may use auth_token.
-        :param label_file: path to file with issue labels and their rules.
-        :param url: Url of issues in repo (ex.: https://api.github.com/repos/<username>/<repo>/issues).
-        If you want to label ALL issues in this repo, you MUST specify this parameter. Otherwise,
-        set it to None in case of labeling only one issue.
-        :param default_label: If no rule can be applied to issue, an issue will be labeled by this string.
-        :param session: Session for handling network communication. If it is None, requests.Session() will be invoked.
-        :param auth_token: GitHub Personal Access Token. If it is None, the auth_file will be read. Otherwise, the
-        value of this variable will be used for authorization and auth_file parameter will be ignored.
+        Args:
+            auth_file (str): path to file with authorization info. If you don't want to read file,
+                you may use *auth_token*.
+            label_file (str): path to file with issue labels and their rules.
+            url (str): Url of issues in repo (ex.: `https://api.github.com/repos/<username>/<repo>/issues`).
+                If you want to label ALL issues in this repo, you MUST specify this parameter. Otherwise,
+                set it to None in case of labeling only one issue.
+            default_label (str): If no rule may be applied to issue, an issue will be labeled by this string.
+            session (betamax_session or requests.Session()): Session for handling network communication.
+                If it is None, requests.Session() will be invoked.
+            auth_token (str): GitHub Personal Access Token. If it is None, the *auth_file* will be read. Otherwise, the
+                value of this variable will be used for authorization and *auth_file* parameter will be ignored.
         """
         self._read_config(auth_file, auth_token, label_file)
 
@@ -32,6 +43,16 @@ class GitHubBot:
         self._session.headers = {'Authorization': 'token ' + self._token, 'User-Agent': 'Python'}
 
     def _read_config(self, auth_file, auth_token, label_file):
+        """
+        The function reads GitHub Personal Access token (from *auth_file* or use *auth_token* if it is given)
+        and labeling rules.
+
+        Args:
+        auth_file (str): File with GitHub Personal Access token.
+        auth_token (str): GitHub Personal Access token. If None, *auth_file* will be read.
+            Otherwise, the program will use the *auth_token*.
+        label_file (str): File with available labels (applied on issues) and their rules.
+        """
         conf = configparser.ConfigParser()
 
         if auth_token:
@@ -49,6 +70,19 @@ class GitHubBot:
             self._label_rules.append(conf['rules'][label])
 
     def label_all_issues(self, label_comments):
+        """
+        Call this function to label all unlabeled issues at once.
+
+        Args:
+            label_comments (bool): Set it to True, if the program must use comments
+                (in addition to issues themselves) for labeling.
+
+        Returns:
+            dict: Dictionary with numbers of issues as keys and lists of assigned labels together
+            with POST HTTP status code as values (ex.: results[15][0] gives labels of the 15-th issue,
+            and results[15][1] gives POST status code of the same issue
+            (if labeling on GitHub was successful or not)).
+        """
         r = self._session.get(self.url)
         r.raise_for_status()
 
@@ -66,12 +100,39 @@ class GitHubBot:
         return results
 
     def label_issue(self, issue_info):
+        """
+        Call this function to label only the given unlabeled issue.
+
+        Args:
+            issue_info (json): Issue information in JSON format.
+                Example issue JSON: https://developer.github.com/v3/activity/events/types/#issuesevent
+
+        Returns:
+            list: List of assigned labels together with POST HTTP status code
+            (if labeling on GitHub was successful or not). Example:
+            results[0] gives labels of the issue, and results[1] gives POST status code of the same issue).
+        """
         if not issue_info['labels']:
             return self._set_labels(issue_info['url'],
                                     issue_info['title'],
                                     issue_info['body'], False)
 
     def _set_labels(self, issue_url, title, body, label_comments):
+        """
+        The function labels an issue on the given url by its title, body and comments.
+
+        Args:
+        issue_url (str): Url of the issue.
+            Example: `https://api.github.com/repos/<username>/<repo>/issues/<issue-number>
+        title (str): Issue's title.
+        body (str): Issue's body.
+        label_comments (bool): Set it to True, if the program must use comments
+            (in addition to issue's title and body) for labeling.
+
+        Returns:
+            list: The first value contains assigned labels, the second one - HTTP POST status code
+            (if labeling on GitHub was successful or not).
+        """
         text = title + " " + body
 
         if label_comments:

@@ -76,9 +76,20 @@ def console(auth_file, label_file, user, repo, period, deflabel, comments):
 
 
 def create_web_config(new_dir, filename):
+    """
+    The function searches for the specified *filename* in *config* directory of this module
+    and, if that file exists, copies it to the *new_dir* directory.
+
+    Args:
+        new_dir (str): Config file *filename* will be created in this directory.
+        filename (str): Config file to copy.
+    """
     with open(new_dir + '/' + filename, 'wb') as f:
         f.write(pkg_resources.resource_string(app_name, '/config/' + filename))
 
 
 def main():
+    """
+    Handles command line arguments.
+    """
     cli(prog_name=app_name)

@@ -11,6 +11,9 @@ import pkg_resources
 
 
 def _read_web_config():
+    """
+    This function reads all files with web configuration.
+    """
     global conf
     conf.read(web_config_file)
 
@@ -45,6 +48,9 @@ else:
 
 @app.route('/')
 def index():
+    """
+    This function generates main page.
+    """
     readme_text = pkg_resources.resource_stream(app_name, 'README.md')
 
     return render_template('index.html', readme_text=readme_text.read().decode("utf-8"))
@@ -52,6 +58,13 @@ def index():
 
 @app.route('/hook', methods=['POST'])
 def hook():
+    """
+    The function handles labeling GitHub issues by receiving GitHub webhook POST requests.
+
+    First, webhook signature (in header "X-Hub-Signature") is verified for security reasons
+    as we don't want to handle undesirable requests. Then :py:func:`github_bot.GitHubBot`  class is used for
+    issue labeling.
+    """
     verify_signature(conf['github']['secret_token'],
                      request.headers['X-Hub-Signature'],
                      request.data)
@@ -68,13 +81,29 @@ def hook():
 
 @app.template_filter('markdown')
 def convert_markdown(text):
-    """Convert markdown text to html"""
+    """
+    Custom Flask template filter. Converts markdown text to safe html.
+
+    Args:
+        text (str): Markdown formatted text as Unicode or ASCII string.
+    """
     return markdown.markdown(text)
 
 
 def verify_signature(secret: str, signature: str, resp_body) -> None:
-    """Verify HMAC-SHA1 signature of the given response body.
+    """
+    Verify HMAC-SHA1 signature of the given response body.
     The signature is expected to be in format ``sha1=<hex-digest>``.
+
+    Args:
+        secret (str): GitHub webhook secret token. See https://developer.github.com/webhooks/securing/
+        signature (str): SHA1 signature from webhook request (from header "X-Hub-Signature").
+        resp_body (str): Webhook request body.
+
+    Raises:
+        ValueError, AttributeError: Error: signature is malformed.
+        Exception: Error: expected type sha1.
+        Exception: Error: digests do not match.
     """
     try:
         alg, digest = signature.lower().split('=', 1)
@@ -93,6 +122,12 @@ def verify_signature(secret: str, signature: str, resp_body) -> None:
 
 
 def run_local_web(web_config):
+    """
+    Runs local Flask server.
+
+    Args:
+        web_config (str): File with main web configuration. If None, the default file *web.cfg* will be used.
+    """
     global web_config_file
     if web_config:
         web_config_file = web_config
