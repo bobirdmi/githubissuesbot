@@ -21,7 +21,7 @@ setup(
     license='Public Domain',
     packages=find_packages(exclude=['tests*']),
     setup_requires=['pytest-runner'],
-    install_requires=['Flask', 'markdown>=2', 'click>=6', 'requests>=2', 'appdirs>=1'],
+    install_requires=['Flask', 'markdown>=2', 'click>=6', 'requests>=2', 'appdirs>=1', 'configparser'],
     tests_require=['pytest', 'betamax'],
     entry_points={
             'console_scripts': [
