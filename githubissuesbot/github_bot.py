@@ -16,6 +16,52 @@ class GitHubBot:
     Attributes:
         url (str): Url of issues in the specified repo (ex.: `https://api.github.com/repos/<username>/<repo>/issues`)).
         default_label (str): If no rule may be applied to issue, an issue will be labeled by this string
+
+    If you have token in *auth.cfg.sample file* and labeling rules in *label.cfg* file,
+    you may call this class the following way
+
+    .. testsetup::
+
+       from githubissuesbot import github_bot
+       import os
+
+       auth_cfg_file = os.path.abspath(os.path.join(os.path.dirname(github_bot.__file__))) + '/config/auth.cfg.sample'
+       label_cfg_file = os.path.abspath(os.path.join(os.path.dirname(github_bot.__file__))) + '/config/label.cfg'
+
+    .. testcode::
+
+       from githubissuesbot import github_bot
+
+       bot = github_bot.GitHubBot(auth_cfg_file,
+                    label_cfg_file,
+                    "https://api.github.com/repos/my-username/my-repo/issues",
+                    "default")
+
+    And access its url and default label by invoking
+
+    >>> bot.url
+    'https://api.github.com/repos/my-username/my-repo/issues'
+    >>> bot.default_label
+    'default'
+
+    You can also send GitHub personal access token as parameter and in this case doesn't matter what
+    you have in *auth_cfg_file*
+
+    .. testcode::
+
+       from githubissuesbot import github_bot
+
+       bot = github_bot.GitHubBot(auth_cfg_file,
+                    label_cfg_file,
+                    "https://api.github.com/repos/my-username/my-repo/issues",
+                    "default",
+                    auth_token='mypersonalaccesstoken')
+       print(bot._token)
+
+    .. testoutput::
+
+       mypersonalaccesstoken
+
     """
     def __init__(self, auth_file, label_file, url, default_label, session=None, auth_token=None):
         """
@@ -33,6 +79,7 @@ class GitHubBot:
                 If it is None, requests.Session() will be invoked.
             auth_token (str): GitHub Personal Access Token. If it is None, the *auth_file* will be read. Otherwise, the
                 value of this variable will be used for authorization and *auth_file* parameter will be ignored.
+
         """
         self._read_config(auth_file, auth_token, label_file)
 

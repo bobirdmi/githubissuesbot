@@ -1,5 +1,5 @@
-githubissuesbot
-===============
+Introduction
+============
 
 GitHub Issues Bot for MI-PYT in FIT CTU in Prague. The program has two
 modes: console and web app. In *console* mode it labels

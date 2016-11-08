@@ -1,8 +1,10 @@
 from setuptools import setup, find_packages
+import sys
 
-with open('githubissuesbot/README.md', 'w') as file_out:
-    with open('README.md', 'r') as file_in:
-        file_out.write(file_in.read())
+if 'sdist' in sys.argv:
+    with open('githubissuesbot/README.md', 'w') as file_out:
+        with open('README.md', 'r') as file_in:
+            file_out.write(file_in.read())
 
 with open('README.rst', 'r') as file:
     long_description = file.read()
@@ -10,16 +12,16 @@ with open('README.rst', 'r') as file:
 setup(
     name='githubissuesbot',
     version='0.5',
-    description='GitHub issues bot as console and web app.',
+    description='Automatically labels GitHub issues as console or web app based on regexp rules.',
     long_description=long_description,
     author='Dmitriy Bobir',
     author_email='astercassio@gmail.com',
     url='https://github.com/bobirdmi',
-    keywords='github,bot,issues',
+    keywords='github,bot,issues,labeling',
     license='Public Domain',
     packages=find_packages(exclude=['tests*']),
     setup_requires=['pytest-runner'],
-    install_requires=['Flask', 'markdown>=2', 'click>=6', 'requests>=2', 'appdirs>=1', 'configparser'],
+    install_requires=['Flask', 'markdown>=2', 'click>=6', 'requests>=2', 'appdirs>=1'],
     tests_require=['pytest', 'betamax'],
     entry_points={
             'console_scripts': [
