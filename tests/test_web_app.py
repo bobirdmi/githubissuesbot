@@ -2,6 +2,7 @@ import pytest
 import markdown
 from githubissuesbot.web_app import app
 from githubissuesbot import web_app
+import os
 
 
 fake_secret = '3ce92e588556bdh7220bc738b4dafad15bj7c196'
@@ -15,7 +16,7 @@ def testapp():
 
 
 def test_main_page(testapp):
-    with open('README.md', 'r') as f:
+    with open(os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir)) + '/README.md', 'r') as f:
         assert markdown.markdown(f.read()) in testapp.get('/').data.decode('utf-8')
 
 
