@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import sys
 
-if 'sdist' in sys.argv:
+if 'sdist' in sys.argv or 'test' in sys.argv:
     with open('githubissuesbot/README.md', 'w') as file_out:
         with open('README.md', 'r') as file_in:
             file_out.write(file_in.read())
