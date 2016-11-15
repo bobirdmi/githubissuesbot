@@ -1,1 +1,6 @@
 sphinx
+Flask
+markdown>=2
+click>=6
+requests>=2
+appdirs>=1
